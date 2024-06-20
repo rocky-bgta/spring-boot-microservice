@@ -80,9 +80,9 @@ public class OrderService {
         //you can call a DB
         Order order = repository.findByOrderId(orderId);
         //you can invoke external api
-        PaymentDTO paymentDTO = restTemplate.getForObject("http://localhost:9292/payments/" + orderId, PaymentDTO.class);
+        PaymentDTO paymentDTO = restTemplate.getForObject("http://PAYMENT-SERVICE/payments/" + orderId, PaymentDTO.class);
         //return new OrderResponseDTO("FAILED", null, null, null);
-        UserDTO userDTO = restTemplate.getForObject("http://localhost:9393/users/" + order.getUserId(), UserDTO.class);
+        UserDTO userDTO = restTemplate.getForObject("http://USER-SERVICE/users/" + order.getUserId(), UserDTO.class);
         return OrderResponseDTO.builder()
                 .order(order)
                 .paymentResponse(paymentDTO)
