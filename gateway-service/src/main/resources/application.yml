@@ -9,6 +9,8 @@ spring:
           uri: lb://ORDER-SERVICE
           predicates:
             - Path=/orders/**
+          filters:
+            - AuthenticationFilter
 
         - id: payment-service
           uri: lb://PAYMENT-SERVICE
