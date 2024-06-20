@@ -1,37 +1,55 @@
+spring:
+  application:
+    name: GATEWAY-SERVICE
+  config:
+    import: configserver:http://localhost:9595
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri : lb://ORDER-SERVICE
+          predicates:
+            - Path=/orders/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name : callOrderFallback
+                fallbackUri : forward:/fallback/order
+
+        - id: payment-service
+          uri : lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payments/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name : callPaymentFallback
+                fallbackUri : forward:/fallback/payment
+
+        - id: user-service
+          uri : lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name : callUserFallback
+                fallbackUri : forward:/fallback/user
+
 #eureka:
 #  client:
 #    service-url:
 #      defaultZone : http://localhost:8761/eureka/
 
-spring:
-  application:
-    name: ORDER-SERVICE
-  config:
-    import: configserver:http://localhost:9595
+
+server:
+  port: 9090
+
 management:
-  health:
-    circuitbreakers:
+  endpoint:
+    gateway:
       enabled: true
   endpoints:
     web:
       exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
-
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      orderService:
-        registerHealthIndicator: true
-        eventConsumerBufferSize: 10
-        failureRateThreshold: 50
-        minimumNumberOfCalls: 5
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-        waitDurationInOpenState: 5s
-        permittedNumberOfCallsInHalfOpenState: 3
-        slidingWindowSize: 10
-        slidingWindowType: COUNT_BASED
-
+        include : "gateway"
