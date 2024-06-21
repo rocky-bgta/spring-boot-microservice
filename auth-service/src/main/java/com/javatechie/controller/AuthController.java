@@ -2,8 +2,10 @@ package com.javatechie.controller;
 
 import com.javatechie.dto.AuthRequest;
 import com.javatechie.entity.UserCredential;
-import com.javatechie.service.AuthService;
+import com.javatechie.service.AzureTokenService;
+import com.javatechie.service.JwtAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     @Autowired
-    private AuthService service;
+    private JwtAuthService service;
+
+    @Autowired
+    private AzureTokenService azureTokenService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -24,10 +29,11 @@ public class AuthController {
     }
 
     @PostMapping("/token")
-    public String getToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<String> getToken(@RequestBody AuthRequest authRequest) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authenticate.isAuthenticated()) {
-            return service.generateToken(authRequest.getUsername());
+            ResponseEntity<String> responseEntity = azureTokenService.getAccessToken(authRequest.getUsername(), authRequest.getPassword());
+            return responseEntity;
         } else {
             throw new RuntimeException("invalid access");
         }
@@ -35,7 +41,6 @@ public class AuthController {
 
     @GetMapping("/validate")
     public String validateToken(@RequestParam("token") String token) {
-        service.validateToken(token);
-        return "Token is valid";
+        return azureTokenService.validateToken(token);
     }
 }
