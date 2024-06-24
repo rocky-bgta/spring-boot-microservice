@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.line.reflection</groupId>
-    <artifactId>service-registry</artifactId>
+    <artifactId>registry-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>registry-service</name>
     <description>registry-service</description>
