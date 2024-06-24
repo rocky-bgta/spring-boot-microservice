@@ -1,5 +1,5 @@
 # spring-boot-microservice
-
+# cd C:\kafka_2.12-3.5.0\bin\windows
 1. Start Zookeeper Server
    For Windows:
    C:\kafka_2.12-3.5.0\bin\windows>zookeeper-server-start.bat C:\kafka_2.12-3.5.0\config\zookeeper.properties
