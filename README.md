@@ -49,3 +49,5 @@ sh bin/kafka-console-producer.sh --broker-list localhost:9092 --topic NewTopic
 
 For Linux/Mac
 sh bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic NewTopic --from-beginning
+
+http://localhost:8080/swagger-ui/index.html#
