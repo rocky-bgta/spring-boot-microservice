@@ -6,7 +6,13 @@ eureka:
   client:
     service-url:
       defaultZone : http://localhost:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${instanceId:${random.value}}
 
 
+#server:
+#  port: 9898
+
+# use port number to 0 so I can run multiple instance without hard coding the port
 server:
-  port: 9898
+  port: 0
